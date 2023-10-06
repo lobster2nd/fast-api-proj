@@ -37,7 +37,7 @@ async def send_email(email: Email):
             server.starttls()
             server.login(smtp_username, smtp_password)
 
-            message = f"Subject: {email.subject}\n\n{email.message}"
+            message = f"From: {smtp_username}\nSubject: {email.subject}\n\n{email.message}"
             server.sendmail(smtp_username, email.to, message)
 
         logging.info(f"Email sent to: {email.to}")
