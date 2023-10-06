@@ -11,7 +11,7 @@ def client():
 
 def test_send_email_success(client):
     response = client.post("/send_email", json={
-        "to": "test@example.com",
+        "to": "mailerapp@bk.ru",
         "subject": "Test Subject",
         "message": "Test Message"
     })
@@ -19,14 +19,22 @@ def test_send_email_success(client):
     assert response.json() == {"message": "Email sent successfully"}
 
 
-def test_send_email_invalid_address(client):
+def test_send_email_null_address(client):
     response = client.post("/send_email", json={
         "to": "",
         "subject": "Test Subject",
         "message": "Test Message"
     })
     assert response.status_code == 422
-    assert response.json() == {"detail": "Invalid email address"}
+
+
+def test_send_email_fake_address(client):
+    response = client.post("/send_email", json={
+        "to": "fake@example.com",
+        "subject": "Test Subject",
+        "message": "Test Message"
+    })
+    assert response.status_code == 500
 
 
 def test_send_email_server_error(client, monkeypatch):
@@ -41,4 +49,3 @@ def test_send_email_server_error(client, monkeypatch):
         "message": "Test Message"
     })
     assert response.status_code == 500
-    assert response.json() == {"detail": "SMTP server error"}

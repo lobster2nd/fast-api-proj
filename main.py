@@ -23,12 +23,12 @@ logging.basicConfig(level=logging.INFO,
 
 
 @app.post("/send_email")
-async def send_email(email: Email):
+def send_email(email: Email):
     if not email.to:
         raise HTTPException(status_code=400, detail="Invalid email address")
 
     try:
-        smtp_server = "smtp.yandex.ru"
+        smtp_server = "smtp.mail.ru"
         smtp_port = 587
         smtp_username = os.getenv("SMTP_USERNAME")
         smtp_password = os.getenv("SMTP_PASSWORD")
@@ -37,7 +37,7 @@ async def send_email(email: Email):
             server.starttls()
             server.login(smtp_username, smtp_password)
 
-            message = f"From: {smtp_username}\nSubject: {email.subject}\n\n{email.message}"
+            message = f"From: {smtp_username}\nTo: {email.to}\nSubject: {email.subject}\n\n{email.message}"
             server.sendmail(smtp_username, email.to, message)
 
         logging.info(f"Email sent to: {email.to}")
