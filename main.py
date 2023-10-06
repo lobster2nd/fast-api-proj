@@ -1,10 +1,15 @@
 import logging
 import smtplib
+import os
 
 from fastapi import FastAPI, HTTPException
+from dotenv import load_dotenv
+
 from models.email import Email
 
-app = FastAPI()
+load_dotenv()
+
+app = FastAPI(title="Spam app")
 
 file_handler = logging.FileHandler("app.log")
 file_handler.setLevel(logging.INFO)
@@ -23,10 +28,10 @@ async def send_email(email: Email):
         raise HTTPException(status_code=400, detail="Invalid email address")
 
     try:
-        smtp_server = "smtp.gmail.com"
+        smtp_server = "smtp.yandex.ru"
         smtp_port = 587
-        smtp_username = "your_username"
-        smtp_password = "your_password"
+        smtp_username = os.getenv("SMTP_USERNAME")
+        smtp_password = os.getenv("SMTP_PASSWORD")
 
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()
