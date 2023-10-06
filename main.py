@@ -11,7 +11,7 @@ from models.email import Email
 
 load_dotenv()
 
-app = FastAPI(title="Mailer app")
+app = FastAPI(title="Mailer")
 
 file_handler = logging.FileHandler("app.log")
 file_handler.setLevel(logging.INFO)
